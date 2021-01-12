@@ -19,6 +19,7 @@ namespace IFGExamAPI.ViewModels
         public DateTime SessionExpiry { get; set; }
         public int UserRoleID { get; set; }
         public int CentreID { get; set; }
+        public string Error { get; set; }
 
         public dynamic RegisterUser()
         {
@@ -66,6 +67,75 @@ namespace IFGExamAPI.ViewModels
 
                 return toReturn;
             }
+        }
+
+        public AuthVM Login()
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+
+            string password = ComputeSha256Hash(this.Password);
+            var user = db.UserLogins.Where(zz => zz.EmailAddress == this.EmailAddress && zz.UserPassword == password).FirstOrDefault();
+
+            if (user!= null)
+            {
+                user.UserSecret = Guid.NewGuid().ToString();
+                user.SessionID = Guid.NewGuid().ToString();
+                user.SessionExpiry = DateTime.Now.AddMinutes(30);
+
+                var toReturn = new AuthVM
+                {
+                    CentreID = (int)user.CentreID,
+                    UserSecret = user.UserSecret,
+                    SessionExpiry = (DateTime)user.SessionExpiry,
+                    SessionID = user.SessionID,
+                    Error = null,
+                    UserRoleID = (int)user.UserRoleID,
+                    EmailAddress = user.EmailAddress
+                };
+
+                return toReturn;
+            }
+            else
+            {
+                var toReturn = new AuthVM
+                {
+                    Error = "A user with that email address and password does not exist."
+                };
+
+                return toReturn;
+            }
+        }
+
+        public dynamic Logout()
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            var user = db.UserLogins.Where(zz => zz.EmailAddress == this.EmailAddress).FirstOrDefault();
+
+            if (user != null)
+            {
+                user.SessionExpiry = DateTime.Now;
+
+                db.SaveChanges();
+
+                dynamic toReturn = new ExpandoObject();
+                toReturn.Success = true;
+                toReturn.Error = null;
+
+                return toReturn;
+            }
+            else
+            {
+                dynamic toReturn = new ExpandoObject();
+                toReturn.Success = false;
+                toReturn.Error = "User not found";
+
+                return toReturn;
+            }
+        }
+
+        public AuthVM RefreshSession()
+        {
+            db.Configuration.ProxyCreationEnabled = false;
         }
 
         private bool UserExists()

@@ -25,6 +25,8 @@ namespace IFGExamAPI.Controllers
             return vm.RegisterUser();
         }
 
+        [Route("RegisterLearner")]
+        [HttpPost]
         public dynamic RegisterLearner()
         {
             var form = HttpContext.Current.Request.Form;
