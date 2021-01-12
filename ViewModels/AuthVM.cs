@@ -136,6 +136,54 @@ namespace IFGExamAPI.ViewModels
         public AuthVM RefreshSession()
         {
             db.Configuration.ProxyCreationEnabled = false;
+
+            try
+            {
+                var refresh = db.UserLogins.Where(zz => zz.SessionID == this.SessionID && zz.UserSecret == this.UserSecret).FirstOrDefault();
+
+                if (refresh == null)
+                {
+                    AuthVM errorReturn = new AuthVM
+                    {
+                        Error = "User not found",
+                    };
+                    return errorReturn;
+                }
+
+                if (refresh.SessionExpiry < DateTime.Now)
+                {
+                    AuthVM errorReturn = new AuthVM
+                    {
+                        Error = "Session has expired! Login again",
+                    };
+                    return errorReturn;
+                }
+
+                refresh.SessionID = Guid.NewGuid().ToString();
+                refresh.SessionExpiry = DateTime.Now.AddMinutes(30);
+
+                db.SaveChanges();
+
+                AuthVM toReturn = new AuthVM
+                {
+                    SessionID = refresh.SessionID,
+                    UserSecret = refresh.UserSecret,
+                    Error = null,
+                    EmailAddress = refresh.EmailAddress,
+                    Password = null,
+                    SessionExpiry = (DateTime)refresh.SessionExpiry,
+                    UserRoleID = (int)refresh.UserRoleID
+                };
+                return toReturn;
+            }
+            catch (Exception)
+            {
+                AuthVM errorReturn = new AuthVM
+                {
+                    Error = "Oops! An error occured. Login again"
+                };
+                return errorReturn;
+            }
         }
 
         private bool UserExists()
