@@ -30,7 +30,8 @@ namespace IFGExamAPI.ViewModels
                 UserLogin user = new UserLogin
                 {
                     EmailAddress = this.EmailAddress,
-                    UserPassword = ComputeSha256Hash(this.Password)
+                    UserPassword = ComputeSha256Hash(this.Password),
+                    UserRoleID = 2
                 };
 
                 try
