@@ -7,6 +7,7 @@ using IFGExamAPI.Models;
 
 namespace IFGExamAPI.Controllers
 {
+    [RoutePrefix("api/Registration")]
     public class RegistrationController : ApiController
     {
         IFGExamDBEntities db = new IFGExamDBEntities();
