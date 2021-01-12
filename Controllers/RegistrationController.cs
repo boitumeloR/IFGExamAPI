@@ -87,6 +87,33 @@ namespace IFGExamAPI.Controllers
             }
         }
 
+
+        [Route("GetCentres")]
+        [HttpGet]
+
+        public dynamic GetCentres()
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            return db.Centres.Select(zz => new
+            {
+                CentreID = zz.CentreID,
+                CentreName = zz.CentreName
+            }).ToList();
+        }
+
+        [Route("GetGrades")]
+        [HttpGet]
+        public dynamic GetGrades()
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            return db.LearnerGrades.Select(zz => new
+            {
+                LearnerGradeID = zz.LearnerGradeID,
+                LearnerGradeLevel = zz.LearnerGradeLevel
+            }).ToList();
+        }
+
+
         private UserLogin FindUser(string email)
         {
             db.Configuration.ProxyCreationEnabled = false;

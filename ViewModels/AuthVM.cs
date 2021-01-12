@@ -118,6 +118,7 @@ namespace IFGExamAPI.ViewModels
                 db.SaveChanges();
 
                 dynamic toReturn = new ExpandoObject();
+
                 toReturn.Success = true;
                 toReturn.Error = null;
 
@@ -166,11 +167,11 @@ namespace IFGExamAPI.ViewModels
 
                 AuthVM toReturn = new AuthVM
                 {
+                    CentreID = (int)refresh.CentreID,
                     SessionID = refresh.SessionID,
                     UserSecret = refresh.UserSecret,
                     Error = null,
                     EmailAddress = refresh.EmailAddress,
-                    Password = null,
                     SessionExpiry = (DateTime)refresh.SessionExpiry,
                     UserRoleID = (int)refresh.UserRoleID
                 };
