@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="6d3df53e5f3044d8a3606eb7d4a80c20" Name="Diagram1">
+        <EntityTypeShape EntityType="IFGExamDBModel.Centre" Width="1.5" PointX="1.5" PointY="9.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="IFGExamDBModel.Course" Width="1.5" PointX="3" PointY="3.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="IFGExamDBModel.CourseGrade" Width="1.5" PointX="0.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="IFGExamDBModel.Learner" Width="1.5" PointX="6" PointY="9.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="IFGExamDBModel.LearnerGrade" Width="1.5" PointX="3.75" PointY="7.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="IFGExamDBModel.Lesson" Width="1.5" PointX="5.25" PointY="3.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="IFGExamDBModel.RegisteredCourse" Width="1.5" PointX="8.25" PointY="3" IsExpanded="true" />
+        <EntityTypeShape EntityType="IFGExamDBModel.SchoolSubject" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="IFGExamDBModel.sysdiagram" Width="1.5" PointX="8.75" PointY="7.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="IFGExamDBModel.UserLogin" Width="1.5" PointX="3.75" PointY="9.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="IFGExamDBModel.UserRole" Width="1.5" PointX="1.5" PointY="12.125" IsExpanded="true" />
+        <AssociationConnector Association="IFGExamDBModel.fk_centre" ManuallyRouted="false" />
+        <AssociationConnector Association="IFGExamDBModel.fk_coursegrade" ManuallyRouted="false" />
+        <AssociationConnector Association="IFGExamDBModel.fk_coursereg" ManuallyRouted="false" />
+        <AssociationConnector Association="IFGExamDBModel.fk_lessoncourse" ManuallyRouted="false" />
+        <AssociationConnector Association="IFGExamDBModel.fk_schoolsubject" ManuallyRouted="false" />
+        <AssociationConnector Association="IFGExamDBModel.fk_learnercourse" ManuallyRouted="false" />
+        <AssociationConnector Association="IFGExamDBModel.fk_learnergrade" ManuallyRouted="false" />
+        <AssociationConnector Association="IFGExamDBModel.fk_userid" ManuallyRouted="false" />
+        <AssociationConnector Association="IFGExamDBModel.fk_userrole" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

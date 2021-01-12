@@ -1,0 +1,697 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="IFGExamDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Centre">
+          <Key>
+            <PropertyRef Name="CentreID" />
+          </Key>
+          <Property Name="CentreID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CentreName" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Course">
+          <Key>
+            <PropertyRef Name="CourseID" />
+          </Key>
+          <Property Name="CourseID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CourseName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="SubjectID" Type="int" />
+          <Property Name="CourseGradeID" Type="int" />
+        </EntityType>
+        <EntityType Name="CourseGrade">
+          <Key>
+            <PropertyRef Name="CourseGradeID" />
+          </Key>
+          <Property Name="CourseGradeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CourseGradeLevel" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Learner">
+          <Key>
+            <PropertyRef Name="LearnerID" />
+          </Key>
+          <Property Name="LearnerID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LearnerSchool" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="UserID" Type="int" />
+          <Property Name="LearnerGradeID" Type="int" />
+          <Property Name="LearnerAgreementDoc" Type="varbinary(max)" Nullable="false" />
+          <Property Name="LearnerAddress" Type="varchar" MaxLength="150" Nullable="false" />
+        </EntityType>
+        <EntityType Name="LearnerGrade">
+          <Key>
+            <PropertyRef Name="LearnerGradeID" />
+          </Key>
+          <Property Name="LearnerGradeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LearnerGradeLevel" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Lesson">
+          <Key>
+            <PropertyRef Name="LessonID" />
+          </Key>
+          <Property Name="LessonID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LessonFreqency" Type="int" Nullable="false" />
+          <Property Name="LessonTime" Type="datetime" Nullable="false" />
+          <Property Name="CourseID" Type="int" />
+        </EntityType>
+        <EntityType Name="RegisteredCourse">
+          <Key>
+            <PropertyRef Name="RegisteredCourseID" />
+          </Key>
+          <Property Name="RegisteredCourseID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LearnerID" Type="int" />
+          <Property Name="CourseID" Type="int" />
+          <Property Name="RegisterDate" Type="datetime" Nullable="false" />
+          <Property Name="IsRegistered" Type="bit" Nullable="false" />
+          <Property Name="DeregisterDate" Type="datetime" />
+          <Property Name="DeregisterReason" Type="varchar" MaxLength="200" />
+          <Property Name="LearnerMark" Type="float" />
+          <Property Name="CourseComments" Type="varchar" MaxLength="200" />
+        </EntityType>
+        <EntityType Name="SchoolSubject">
+          <Key>
+            <PropertyRef Name="SubjectID" />
+          </Key>
+          <Property Name="SubjectID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SubjectName" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="UserLogin">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EmailAddress" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="UserPassword" Type="varchar(max)" Nullable="false" />
+          <Property Name="UserSecret" Type="varchar(max)" />
+          <Property Name="SessionID" Type="varchar(max)" />
+          <Property Name="SessionExpiry" Type="datetime" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Surname" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="IDNumber" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="UserRoleID" Type="int" />
+          <Property Name="CentreID" Type="int" />
+        </EntityType>
+        <EntityType Name="UserRole">
+          <Key>
+            <PropertyRef Name="UserRoleID" />
+          </Key>
+          <Property Name="UserRoleID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserRoleName" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <Association Name="fk_centre">
+          <End Role="Centre" Type="Self.Centre" Multiplicity="0..1" />
+          <End Role="UserLogin" Type="Self.UserLogin" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Centre">
+              <PropertyRef Name="CentreID" />
+            </Principal>
+            <Dependent Role="UserLogin">
+              <PropertyRef Name="CentreID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_coursegrade">
+          <End Role="CourseGrade" Type="Self.CourseGrade" Multiplicity="0..1" />
+          <End Role="Course" Type="Self.Course" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CourseGrade">
+              <PropertyRef Name="CourseGradeID" />
+            </Principal>
+            <Dependent Role="Course">
+              <PropertyRef Name="CourseGradeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_coursereg">
+          <End Role="Course" Type="Self.Course" Multiplicity="0..1" />
+          <End Role="RegisteredCourse" Type="Self.RegisteredCourse" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Course">
+              <PropertyRef Name="CourseID" />
+            </Principal>
+            <Dependent Role="RegisteredCourse">
+              <PropertyRef Name="CourseID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_learnercourse">
+          <End Role="Learner" Type="Self.Learner" Multiplicity="0..1" />
+          <End Role="RegisteredCourse" Type="Self.RegisteredCourse" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Learner">
+              <PropertyRef Name="LearnerID" />
+            </Principal>
+            <Dependent Role="RegisteredCourse">
+              <PropertyRef Name="LearnerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_learnergrade">
+          <End Role="LearnerGrade" Type="Self.LearnerGrade" Multiplicity="0..1" />
+          <End Role="Learner" Type="Self.Learner" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LearnerGrade">
+              <PropertyRef Name="LearnerGradeID" />
+            </Principal>
+            <Dependent Role="Learner">
+              <PropertyRef Name="LearnerGradeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_lessoncourse">
+          <End Role="Course" Type="Self.Course" Multiplicity="0..1" />
+          <End Role="Lesson" Type="Self.Lesson" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Course">
+              <PropertyRef Name="CourseID" />
+            </Principal>
+            <Dependent Role="Lesson">
+              <PropertyRef Name="CourseID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_schoolsubject">
+          <End Role="SchoolSubject" Type="Self.SchoolSubject" Multiplicity="0..1" />
+          <End Role="Course" Type="Self.Course" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SchoolSubject">
+              <PropertyRef Name="SubjectID" />
+            </Principal>
+            <Dependent Role="Course">
+              <PropertyRef Name="SubjectID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_userid">
+          <End Role="UserLogin" Type="Self.UserLogin" Multiplicity="0..1" />
+          <End Role="Learner" Type="Self.Learner" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserLogin">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Learner">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_userrole">
+          <End Role="UserRole" Type="Self.UserRole" Multiplicity="0..1" />
+          <End Role="UserLogin" Type="Self.UserLogin" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserRole">
+              <PropertyRef Name="UserRoleID" />
+            </Principal>
+            <Dependent Role="UserLogin">
+              <PropertyRef Name="UserRoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="IFGExamDBModelStoreContainer">
+          <EntitySet Name="Centre" EntityType="Self.Centre" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Course" EntityType="Self.Course" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CourseGrade" EntityType="Self.CourseGrade" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Learner" EntityType="Self.Learner" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LearnerGrade" EntityType="Self.LearnerGrade" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Lesson" EntityType="Self.Lesson" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RegisteredCourse" EntityType="Self.RegisteredCourse" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SchoolSubject" EntityType="Self.SchoolSubject" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserLogin" EntityType="Self.UserLogin" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserRole" EntityType="Self.UserRole" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="fk_centre" Association="Self.fk_centre">
+            <End Role="Centre" EntitySet="Centre" />
+            <End Role="UserLogin" EntitySet="UserLogin" />
+          </AssociationSet>
+          <AssociationSet Name="fk_coursegrade" Association="Self.fk_coursegrade">
+            <End Role="CourseGrade" EntitySet="CourseGrade" />
+            <End Role="Course" EntitySet="Course" />
+          </AssociationSet>
+          <AssociationSet Name="fk_coursereg" Association="Self.fk_coursereg">
+            <End Role="Course" EntitySet="Course" />
+            <End Role="RegisteredCourse" EntitySet="RegisteredCourse" />
+          </AssociationSet>
+          <AssociationSet Name="fk_learnercourse" Association="Self.fk_learnercourse">
+            <End Role="Learner" EntitySet="Learner" />
+            <End Role="RegisteredCourse" EntitySet="RegisteredCourse" />
+          </AssociationSet>
+          <AssociationSet Name="fk_learnergrade" Association="Self.fk_learnergrade">
+            <End Role="LearnerGrade" EntitySet="LearnerGrade" />
+            <End Role="Learner" EntitySet="Learner" />
+          </AssociationSet>
+          <AssociationSet Name="fk_lessoncourse" Association="Self.fk_lessoncourse">
+            <End Role="Course" EntitySet="Course" />
+            <End Role="Lesson" EntitySet="Lesson" />
+          </AssociationSet>
+          <AssociationSet Name="fk_schoolsubject" Association="Self.fk_schoolsubject">
+            <End Role="SchoolSubject" EntitySet="SchoolSubject" />
+            <End Role="Course" EntitySet="Course" />
+          </AssociationSet>
+          <AssociationSet Name="fk_userid" Association="Self.fk_userid">
+            <End Role="UserLogin" EntitySet="UserLogin" />
+            <End Role="Learner" EntitySet="Learner" />
+          </AssociationSet>
+          <AssociationSet Name="fk_userrole" Association="Self.fk_userrole">
+            <End Role="UserRole" EntitySet="UserRole" />
+            <End Role="UserLogin" EntitySet="UserLogin" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="IFGExamDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Centre">
+          <Key>
+            <PropertyRef Name="CentreID" />
+          </Key>
+          <Property Name="CentreID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CentreName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="UserLogins" Relationship="Self.fk_centre" FromRole="Centre" ToRole="UserLogin" />
+        </EntityType>
+        <EntityType Name="Course">
+          <Key>
+            <PropertyRef Name="CourseID" />
+          </Key>
+          <Property Name="CourseID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CourseName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="SubjectID" Type="Int32" />
+          <Property Name="CourseGradeID" Type="Int32" />
+          <NavigationProperty Name="CourseGrade" Relationship="Self.fk_coursegrade" FromRole="Course" ToRole="CourseGrade" />
+          <NavigationProperty Name="RegisteredCourses" Relationship="Self.fk_coursereg" FromRole="Course" ToRole="RegisteredCourse" />
+          <NavigationProperty Name="Lessons" Relationship="Self.fk_lessoncourse" FromRole="Course" ToRole="Lesson" />
+          <NavigationProperty Name="SchoolSubject" Relationship="Self.fk_schoolsubject" FromRole="Course" ToRole="SchoolSubject" />
+        </EntityType>
+        <EntityType Name="CourseGrade">
+          <Key>
+            <PropertyRef Name="CourseGradeID" />
+          </Key>
+          <Property Name="CourseGradeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CourseGradeLevel" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Courses" Relationship="Self.fk_coursegrade" FromRole="CourseGrade" ToRole="Course" />
+        </EntityType>
+        <EntityType Name="Learner">
+          <Key>
+            <PropertyRef Name="LearnerID" />
+          </Key>
+          <Property Name="LearnerID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LearnerSchool" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="UserID" Type="Int32" />
+          <Property Name="LearnerGradeID" Type="Int32" />
+          <Property Name="LearnerAgreementDoc" Type="Binary" MaxLength="Max" FixedLength="false" Nullable="false" />
+          <Property Name="LearnerAddress" Type="String" MaxLength="150" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="RegisteredCourses" Relationship="Self.fk_learnercourse" FromRole="Learner" ToRole="RegisteredCourse" />
+          <NavigationProperty Name="LearnerGrade" Relationship="Self.fk_learnergrade" FromRole="Learner" ToRole="LearnerGrade" />
+          <NavigationProperty Name="UserLogin" Relationship="Self.fk_userid" FromRole="Learner" ToRole="UserLogin" />
+        </EntityType>
+        <EntityType Name="LearnerGrade">
+          <Key>
+            <PropertyRef Name="LearnerGradeID" />
+          </Key>
+          <Property Name="LearnerGradeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LearnerGradeLevel" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Learners" Relationship="Self.fk_learnergrade" FromRole="LearnerGrade" ToRole="Learner" />
+        </EntityType>
+        <EntityType Name="Lesson">
+          <Key>
+            <PropertyRef Name="LessonID" />
+          </Key>
+          <Property Name="LessonID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LessonFreqency" Type="Int32" Nullable="false" />
+          <Property Name="LessonTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CourseID" Type="Int32" />
+          <NavigationProperty Name="Course" Relationship="Self.fk_lessoncourse" FromRole="Lesson" ToRole="Course" />
+        </EntityType>
+        <EntityType Name="RegisteredCourse">
+          <Key>
+            <PropertyRef Name="RegisteredCourseID" />
+          </Key>
+          <Property Name="RegisteredCourseID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LearnerID" Type="Int32" />
+          <Property Name="CourseID" Type="Int32" />
+          <Property Name="RegisterDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="IsRegistered" Type="Boolean" Nullable="false" />
+          <Property Name="DeregisterDate" Type="DateTime" Precision="3" />
+          <Property Name="DeregisterReason" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="LearnerMark" Type="Double" />
+          <Property Name="CourseComments" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Course" Relationship="Self.fk_coursereg" FromRole="RegisteredCourse" ToRole="Course" />
+          <NavigationProperty Name="Learner" Relationship="Self.fk_learnercourse" FromRole="RegisteredCourse" ToRole="Learner" />
+        </EntityType>
+        <EntityType Name="SchoolSubject">
+          <Key>
+            <PropertyRef Name="SubjectID" />
+          </Key>
+          <Property Name="SubjectID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SubjectName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Courses" Relationship="Self.fk_schoolsubject" FromRole="SchoolSubject" ToRole="Course" />
+        </EntityType>
+        <EntityType Name="sysdiagram">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="UserLogin">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EmailAddress" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="UserPassword" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="UserSecret" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="SessionID" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="SessionExpiry" Type="DateTime" Precision="3" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Surname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="IDNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="UserRoleID" Type="Int32" />
+          <Property Name="CentreID" Type="Int32" />
+          <NavigationProperty Name="Centre" Relationship="Self.fk_centre" FromRole="UserLogin" ToRole="Centre" />
+          <NavigationProperty Name="Learners" Relationship="Self.fk_userid" FromRole="UserLogin" ToRole="Learner" />
+          <NavigationProperty Name="UserRole" Relationship="Self.fk_userrole" FromRole="UserLogin" ToRole="UserRole" />
+        </EntityType>
+        <EntityType Name="UserRole">
+          <Key>
+            <PropertyRef Name="UserRoleID" />
+          </Key>
+          <Property Name="UserRoleID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserRoleName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="UserLogins" Relationship="Self.fk_userrole" FromRole="UserRole" ToRole="UserLogin" />
+        </EntityType>
+        <Association Name="fk_centre">
+          <End Role="Centre" Type="Self.Centre" Multiplicity="0..1" />
+          <End Role="UserLogin" Type="Self.UserLogin" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Centre">
+              <PropertyRef Name="CentreID" />
+            </Principal>
+            <Dependent Role="UserLogin">
+              <PropertyRef Name="CentreID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_coursegrade">
+          <End Role="CourseGrade" Type="Self.CourseGrade" Multiplicity="0..1" />
+          <End Role="Course" Type="Self.Course" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CourseGrade">
+              <PropertyRef Name="CourseGradeID" />
+            </Principal>
+            <Dependent Role="Course">
+              <PropertyRef Name="CourseGradeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_coursereg">
+          <End Role="Course" Type="Self.Course" Multiplicity="0..1" />
+          <End Role="RegisteredCourse" Type="Self.RegisteredCourse" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Course">
+              <PropertyRef Name="CourseID" />
+            </Principal>
+            <Dependent Role="RegisteredCourse">
+              <PropertyRef Name="CourseID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_lessoncourse">
+          <End Role="Course" Type="Self.Course" Multiplicity="0..1" />
+          <End Role="Lesson" Type="Self.Lesson" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Course">
+              <PropertyRef Name="CourseID" />
+            </Principal>
+            <Dependent Role="Lesson">
+              <PropertyRef Name="CourseID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_schoolsubject">
+          <End Role="SchoolSubject" Type="Self.SchoolSubject" Multiplicity="0..1" />
+          <End Role="Course" Type="Self.Course" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SchoolSubject">
+              <PropertyRef Name="SubjectID" />
+            </Principal>
+            <Dependent Role="Course">
+              <PropertyRef Name="SubjectID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_learnercourse">
+          <End Role="Learner" Type="Self.Learner" Multiplicity="0..1" />
+          <End Role="RegisteredCourse" Type="Self.RegisteredCourse" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Learner">
+              <PropertyRef Name="LearnerID" />
+            </Principal>
+            <Dependent Role="RegisteredCourse">
+              <PropertyRef Name="LearnerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_learnergrade">
+          <End Role="LearnerGrade" Type="Self.LearnerGrade" Multiplicity="0..1" />
+          <End Role="Learner" Type="Self.Learner" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LearnerGrade">
+              <PropertyRef Name="LearnerGradeID" />
+            </Principal>
+            <Dependent Role="Learner">
+              <PropertyRef Name="LearnerGradeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_userid">
+          <End Role="UserLogin" Type="Self.UserLogin" Multiplicity="0..1" />
+          <End Role="Learner" Type="Self.Learner" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserLogin">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Learner">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_userrole">
+          <End Role="UserRole" Type="Self.UserRole" Multiplicity="0..1" />
+          <End Role="UserLogin" Type="Self.UserLogin" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserRole">
+              <PropertyRef Name="UserRoleID" />
+            </Principal>
+            <Dependent Role="UserLogin">
+              <PropertyRef Name="UserRoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="IFGExamDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Centres" EntityType="Self.Centre" />
+          <EntitySet Name="Courses" EntityType="Self.Course" />
+          <EntitySet Name="CourseGrades" EntityType="Self.CourseGrade" />
+          <EntitySet Name="Learners" EntityType="Self.Learner" />
+          <EntitySet Name="LearnerGrades" EntityType="Self.LearnerGrade" />
+          <EntitySet Name="Lessons" EntityType="Self.Lesson" />
+          <EntitySet Name="RegisteredCourses" EntityType="Self.RegisteredCourse" />
+          <EntitySet Name="SchoolSubjects" EntityType="Self.SchoolSubject" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
+          <EntitySet Name="UserLogins" EntityType="Self.UserLogin" />
+          <EntitySet Name="UserRoles" EntityType="Self.UserRole" />
+          <AssociationSet Name="fk_centre" Association="Self.fk_centre">
+            <End Role="Centre" EntitySet="Centres" />
+            <End Role="UserLogin" EntitySet="UserLogins" />
+          </AssociationSet>
+          <AssociationSet Name="fk_coursegrade" Association="Self.fk_coursegrade">
+            <End Role="CourseGrade" EntitySet="CourseGrades" />
+            <End Role="Course" EntitySet="Courses" />
+          </AssociationSet>
+          <AssociationSet Name="fk_coursereg" Association="Self.fk_coursereg">
+            <End Role="Course" EntitySet="Courses" />
+            <End Role="RegisteredCourse" EntitySet="RegisteredCourses" />
+          </AssociationSet>
+          <AssociationSet Name="fk_lessoncourse" Association="Self.fk_lessoncourse">
+            <End Role="Course" EntitySet="Courses" />
+            <End Role="Lesson" EntitySet="Lessons" />
+          </AssociationSet>
+          <AssociationSet Name="fk_schoolsubject" Association="Self.fk_schoolsubject">
+            <End Role="SchoolSubject" EntitySet="SchoolSubjects" />
+            <End Role="Course" EntitySet="Courses" />
+          </AssociationSet>
+          <AssociationSet Name="fk_learnercourse" Association="Self.fk_learnercourse">
+            <End Role="Learner" EntitySet="Learners" />
+            <End Role="RegisteredCourse" EntitySet="RegisteredCourses" />
+          </AssociationSet>
+          <AssociationSet Name="fk_learnergrade" Association="Self.fk_learnergrade">
+            <End Role="LearnerGrade" EntitySet="LearnerGrades" />
+            <End Role="Learner" EntitySet="Learners" />
+          </AssociationSet>
+          <AssociationSet Name="fk_userid" Association="Self.fk_userid">
+            <End Role="UserLogin" EntitySet="UserLogins" />
+            <End Role="Learner" EntitySet="Learners" />
+          </AssociationSet>
+          <AssociationSet Name="fk_userrole" Association="Self.fk_userrole">
+            <End Role="UserRole" EntitySet="UserRoles" />
+            <End Role="UserLogin" EntitySet="UserLogins" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="IFGExamDBModelStoreContainer" CdmEntityContainer="IFGExamDBEntities">
+          <EntitySetMapping Name="Centres">
+            <EntityTypeMapping TypeName="IFGExamDBModel.Centre">
+              <MappingFragment StoreEntitySet="Centre">
+                <ScalarProperty Name="CentreID" ColumnName="CentreID" />
+                <ScalarProperty Name="CentreName" ColumnName="CentreName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Courses">
+            <EntityTypeMapping TypeName="IFGExamDBModel.Course">
+              <MappingFragment StoreEntitySet="Course">
+                <ScalarProperty Name="CourseID" ColumnName="CourseID" />
+                <ScalarProperty Name="CourseName" ColumnName="CourseName" />
+                <ScalarProperty Name="SubjectID" ColumnName="SubjectID" />
+                <ScalarProperty Name="CourseGradeID" ColumnName="CourseGradeID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CourseGrades">
+            <EntityTypeMapping TypeName="IFGExamDBModel.CourseGrade">
+              <MappingFragment StoreEntitySet="CourseGrade">
+                <ScalarProperty Name="CourseGradeID" ColumnName="CourseGradeID" />
+                <ScalarProperty Name="CourseGradeLevel" ColumnName="CourseGradeLevel" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Learners">
+            <EntityTypeMapping TypeName="IFGExamDBModel.Learner">
+              <MappingFragment StoreEntitySet="Learner">
+                <ScalarProperty Name="LearnerID" ColumnName="LearnerID" />
+                <ScalarProperty Name="LearnerSchool" ColumnName="LearnerSchool" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="LearnerGradeID" ColumnName="LearnerGradeID" />
+                <ScalarProperty Name="LearnerAgreementDoc" ColumnName="LearnerAgreementDoc" />
+                <ScalarProperty Name="LearnerAddress" ColumnName="LearnerAddress" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LearnerGrades">
+            <EntityTypeMapping TypeName="IFGExamDBModel.LearnerGrade">
+              <MappingFragment StoreEntitySet="LearnerGrade">
+                <ScalarProperty Name="LearnerGradeID" ColumnName="LearnerGradeID" />
+                <ScalarProperty Name="LearnerGradeLevel" ColumnName="LearnerGradeLevel" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Lessons">
+            <EntityTypeMapping TypeName="IFGExamDBModel.Lesson">
+              <MappingFragment StoreEntitySet="Lesson">
+                <ScalarProperty Name="LessonID" ColumnName="LessonID" />
+                <ScalarProperty Name="LessonFreqency" ColumnName="LessonFreqency" />
+                <ScalarProperty Name="LessonTime" ColumnName="LessonTime" />
+                <ScalarProperty Name="CourseID" ColumnName="CourseID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RegisteredCourses">
+            <EntityTypeMapping TypeName="IFGExamDBModel.RegisteredCourse">
+              <MappingFragment StoreEntitySet="RegisteredCourse">
+                <ScalarProperty Name="RegisteredCourseID" ColumnName="RegisteredCourseID" />
+                <ScalarProperty Name="LearnerID" ColumnName="LearnerID" />
+                <ScalarProperty Name="CourseID" ColumnName="CourseID" />
+                <ScalarProperty Name="RegisterDate" ColumnName="RegisterDate" />
+                <ScalarProperty Name="IsRegistered" ColumnName="IsRegistered" />
+                <ScalarProperty Name="DeregisterDate" ColumnName="DeregisterDate" />
+                <ScalarProperty Name="DeregisterReason" ColumnName="DeregisterReason" />
+                <ScalarProperty Name="LearnerMark" ColumnName="LearnerMark" />
+                <ScalarProperty Name="CourseComments" ColumnName="CourseComments" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SchoolSubjects">
+            <EntityTypeMapping TypeName="IFGExamDBModel.SchoolSubject">
+              <MappingFragment StoreEntitySet="SchoolSubject">
+                <ScalarProperty Name="SubjectID" ColumnName="SubjectID" />
+                <ScalarProperty Name="SubjectName" ColumnName="SubjectName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="IFGExamDBModel.sysdiagram">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserLogins">
+            <EntityTypeMapping TypeName="IFGExamDBModel.UserLogin">
+              <MappingFragment StoreEntitySet="UserLogin">
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="EmailAddress" ColumnName="EmailAddress" />
+                <ScalarProperty Name="UserPassword" ColumnName="UserPassword" />
+                <ScalarProperty Name="UserSecret" ColumnName="UserSecret" />
+                <ScalarProperty Name="SessionID" ColumnName="SessionID" />
+                <ScalarProperty Name="SessionExpiry" ColumnName="SessionExpiry" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Surname" ColumnName="Surname" />
+                <ScalarProperty Name="IDNumber" ColumnName="IDNumber" />
+                <ScalarProperty Name="UserRoleID" ColumnName="UserRoleID" />
+                <ScalarProperty Name="CentreID" ColumnName="CentreID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserRoles">
+            <EntityTypeMapping TypeName="IFGExamDBModel.UserRole">
+              <MappingFragment StoreEntitySet="UserRole">
+                <ScalarProperty Name="UserRoleID" ColumnName="UserRoleID" />
+                <ScalarProperty Name="UserRoleName" ColumnName="UserRoleName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
