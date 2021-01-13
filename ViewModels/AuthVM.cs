@@ -6,6 +6,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Web;
 using IFGExamAPI.Models;
+using System.Data.Entity;
 
 namespace IFGExamAPI.ViewModels
 {
@@ -18,6 +19,7 @@ namespace IFGExamAPI.ViewModels
         public string SessionID { get; set; }
         public DateTime SessionExpiry { get; set; }
         public int UserRoleID { get; set; }
+        public string UserRoleName { get; set; }
         public int CentreID { get; set; }
         public string Error { get; set; }
 
@@ -32,7 +34,7 @@ namespace IFGExamAPI.ViewModels
                 {
                     EmailAddress = this.EmailAddress,
                     UserPassword = ComputeSha256Hash(this.Password),
-                    UserRoleID = 2
+                    UserRoleID = 2 // For learners
                 };
 
                 try
@@ -43,6 +45,7 @@ namespace IFGExamAPI.ViewModels
                     dynamic toReturn = new ExpandoObject();
 
                     toReturn.Success = true;
+                    toReturn.EmailAddress = user.EmailAddress;
                     toReturn.Error = null;
 
                     return toReturn;
@@ -74,7 +77,7 @@ namespace IFGExamAPI.ViewModels
             db.Configuration.ProxyCreationEnabled = false;
 
             string password = ComputeSha256Hash(this.Password);
-            var user = db.UserLogins.Where(zz => zz.EmailAddress == this.EmailAddress && zz.UserPassword == password).FirstOrDefault();
+            var user = db.UserLogins.Include(zz => zz.UserRole).Where(zz => zz.EmailAddress == this.EmailAddress && zz.UserPassword == password).FirstOrDefault();
 
             if (user!= null)
             {
@@ -82,6 +85,7 @@ namespace IFGExamAPI.ViewModels
                 user.SessionID = Guid.NewGuid().ToString();
                 user.SessionExpiry = DateTime.Now.AddMinutes(30);
 
+                db.SaveChanges();
                 var toReturn = new AuthVM
                 {
                     CentreID = (int)user.CentreID,
@@ -90,6 +94,7 @@ namespace IFGExamAPI.ViewModels
                     SessionID = user.SessionID,
                     Error = null,
                     UserRoleID = (int)user.UserRoleID,
+                    UserRoleName = user.UserRole.UserRoleName,
                     EmailAddress = user.EmailAddress
                 };
 
@@ -140,7 +145,7 @@ namespace IFGExamAPI.ViewModels
 
             try
             {
-                var refresh = db.UserLogins.Where(zz => zz.SessionID == this.SessionID && zz.UserSecret == this.UserSecret).FirstOrDefault();
+                var refresh = db.UserLogins.Include(zz => zz.UserRole).Where(zz => zz.SessionID == this.SessionID && zz.UserSecret == this.UserSecret).FirstOrDefault();
 
                 if (refresh == null)
                 {
@@ -173,7 +178,8 @@ namespace IFGExamAPI.ViewModels
                     Error = null,
                     EmailAddress = refresh.EmailAddress,
                     SessionExpiry = (DateTime)refresh.SessionExpiry,
-                    UserRoleID = (int)refresh.UserRoleID
+                    UserRoleID = (int)refresh.UserRoleID,
+                    UserRoleName = refresh.UserRole.UserRoleName
                 };
                 return toReturn;
             }

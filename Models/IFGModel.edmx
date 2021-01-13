@@ -37,7 +37,9 @@
           <Property Name="UserID" Type="int" />
           <Property Name="LearnerGradeID" Type="int" />
           <Property Name="LearnerAgreementDoc" Type="varbinary(max)" Nullable="false" />
-          <Property Name="LearnerAddress" Type="varchar" MaxLength="150" Nullable="false" />
+          <Property Name="LearnerAddressLine1" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="LearnerAddressLine2" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="LearnerPostalCode" Type="varchar" MaxLength="150" Nullable="false" />
         </EntityType>
         <EntityType Name="LearnerGrade">
           <Key>
@@ -76,16 +78,6 @@
           <Property Name="SubjectID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="SubjectName" Type="varchar" MaxLength="50" Nullable="false" />
         </EntityType>
-        <EntityType Name="sysdiagrams">
-          <Key>
-            <PropertyRef Name="diagram_id" />
-          </Key>
-          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
-          <Property Name="principal_id" Type="int" Nullable="false" />
-          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="version" Type="int" />
-          <Property Name="definition" Type="varbinary(max)" />
-        </EntityType>
         <EntityType Name="UserLogin">
           <Key>
             <PropertyRef Name="UserID" />
@@ -96,9 +88,9 @@
           <Property Name="UserSecret" Type="varchar(max)" />
           <Property Name="SessionID" Type="varchar(max)" />
           <Property Name="SessionExpiry" Type="datetime" />
-          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="Surname" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="IDNumber" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" />
+          <Property Name="Surname" Type="varchar" MaxLength="50" />
+          <Property Name="IDNumber" Type="varchar" MaxLength="50" />
           <Property Name="UserRoleID" Type="int" />
           <Property Name="CentreID" Type="int" />
         </EntityType>
@@ -226,7 +218,6 @@
           <EntitySet Name="Lesson" EntityType="Self.Lesson" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RegisteredCourse" EntityType="Self.RegisteredCourse" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SchoolSubject" EntityType="Self.SchoolSubject" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserLogin" EntityType="Self.UserLogin" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserRole" EntityType="Self.UserRole" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="fk_centre" Association="Self.fk_centre">
@@ -309,7 +300,9 @@
           <Property Name="UserID" Type="Int32" />
           <Property Name="LearnerGradeID" Type="Int32" />
           <Property Name="LearnerAgreementDoc" Type="Binary" MaxLength="Max" FixedLength="false" Nullable="false" />
-          <Property Name="LearnerAddress" Type="String" MaxLength="150" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="LearnerAddressLine1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="LearnerAddressLine2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="LearnerPostalCode" Type="String" MaxLength="150" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="RegisteredCourses" Relationship="Self.fk_learnercourse" FromRole="Learner" ToRole="RegisteredCourse" />
           <NavigationProperty Name="LearnerGrade" Relationship="Self.fk_learnergrade" FromRole="Learner" ToRole="LearnerGrade" />
           <NavigationProperty Name="UserLogin" Relationship="Self.fk_userid" FromRole="Learner" ToRole="UserLogin" />
@@ -356,16 +349,6 @@
           <Property Name="SubjectName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="Courses" Relationship="Self.fk_schoolsubject" FromRole="SchoolSubject" ToRole="Course" />
         </EntityType>
-        <EntityType Name="sysdiagram">
-          <Key>
-            <PropertyRef Name="diagram_id" />
-          </Key>
-          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="principal_id" Type="Int32" Nullable="false" />
-          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="version" Type="Int32" />
-          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
-        </EntityType>
         <EntityType Name="UserLogin">
           <Key>
             <PropertyRef Name="UserID" />
@@ -376,9 +359,9 @@
           <Property Name="UserSecret" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="SessionID" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="SessionExpiry" Type="DateTime" Precision="3" />
-          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Surname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="IDNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Surname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="IDNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="UserRoleID" Type="Int32" />
           <Property Name="CentreID" Type="Int32" />
           <NavigationProperty Name="Centre" Relationship="Self.fk_centre" FromRole="UserLogin" ToRole="Centre" />
@@ -510,7 +493,6 @@
           <EntitySet Name="Lessons" EntityType="Self.Lesson" />
           <EntitySet Name="RegisteredCourses" EntityType="Self.RegisteredCourse" />
           <EntitySet Name="SchoolSubjects" EntityType="Self.SchoolSubject" />
-          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
           <EntitySet Name="UserLogins" EntityType="Self.UserLogin" />
           <EntitySet Name="UserRoles" EntityType="Self.UserRole" />
           <AssociationSet Name="fk_centre" Association="Self.fk_centre">
@@ -590,7 +572,9 @@
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="LearnerGradeID" ColumnName="LearnerGradeID" />
                 <ScalarProperty Name="LearnerAgreementDoc" ColumnName="LearnerAgreementDoc" />
-                <ScalarProperty Name="LearnerAddress" ColumnName="LearnerAddress" />
+                <ScalarProperty Name="LearnerAddressLine1" ColumnName="LearnerAddressLine1" />
+                <ScalarProperty Name="LearnerAddressLine2" ColumnName="LearnerAddressLine2" />
+                <ScalarProperty Name="LearnerPostalCode" ColumnName="LearnerPostalCode" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -632,17 +616,6 @@
               <MappingFragment StoreEntitySet="SchoolSubject">
                 <ScalarProperty Name="SubjectID" ColumnName="SubjectID" />
                 <ScalarProperty Name="SubjectName" ColumnName="SubjectName" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="sysdiagrams">
-            <EntityTypeMapping TypeName="IFGExamDBModel.sysdiagram">
-              <MappingFragment StoreEntitySet="sysdiagrams">
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
-                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
-                <ScalarProperty Name="version" ColumnName="version" />
-                <ScalarProperty Name="definition" ColumnName="definition" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

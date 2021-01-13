@@ -25,7 +25,9 @@ namespace IFGExamAPI.Models
         public Nullable<int> UserID { get; set; }
         public Nullable<int> LearnerGradeID { get; set; }
         public byte[] LearnerAgreementDoc { get; set; }
-        public string LearnerAddress { get; set; }
+        public string LearnerAddressLine1 { get; set; }
+        public string LearnerAddressLine2 { get; set; }
+        public string LearnerPostalCode { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<RegisteredCourse> RegisteredCourses { get; set; }
