@@ -18,7 +18,7 @@ namespace IFGExamAPI.Models
         public Nullable<int> LearnerID { get; set; }
         public Nullable<int> CourseID { get; set; }
         public System.DateTime RegisterDate { get; set; }
-        public bool IsRegistered { get; set; }
+        public Nullable<int> RegistrationStatusID { get; set; }
         public Nullable<System.DateTime> DeregisterDate { get; set; }
         public string DeregisterReason { get; set; }
         public Nullable<double> LearnerMark { get; set; }
@@ -26,5 +26,6 @@ namespace IFGExamAPI.Models
     
         public virtual Course Course { get; set; }
         public virtual Learner Learner { get; set; }
+        public virtual RegistrationStatu RegistrationStatu { get; set; }
     }
 }

@@ -50,7 +50,9 @@ namespace IFGExamAPI.Controllers
                     UserID = user.UserID,
                     LearnerSchool = form.Get("LearnerSchool"),
                     LearnerGradeID = Convert.ToInt32(form.Get("LearnerGradeID")),
-                    LearnerAddress = form.Get("LearnerAddress"),
+                    LearnerAddressLine1 = form.Get("Address1"),
+                    LearnerAddressLine2 = form.Get("Address2"),
+                    LearnerPostalCode = form.Get("Code"),
                     LearnerAgreementDoc = new byte[file.ContentLength]
                 };
 

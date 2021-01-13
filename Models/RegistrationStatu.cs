@@ -12,26 +12,18 @@ namespace IFGExamAPI.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Learner
+    public partial class RegistrationStatu
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Learner()
+        public RegistrationStatu()
         {
             this.RegisteredCourses = new HashSet<RegisteredCourse>();
         }
     
-        public int LearnerID { get; set; }
-        public string LearnerSchool { get; set; }
-        public Nullable<int> UserID { get; set; }
-        public Nullable<int> LearnerGradeID { get; set; }
-        public byte[] LearnerAgreementDoc { get; set; }
-        public string LearnerAddressLine1 { get; set; }
-        public string LearnerAddressLine2 { get; set; }
-        public string LearnerPostalCode { get; set; }
+        public int RegistrationStatusID { get; set; }
+        public string RegistrationStatusName { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<RegisteredCourse> RegisteredCourses { get; set; }
-        public virtual LearnerGrade LearnerGrade { get; set; }
-        public virtual UserLogin UserLogin { get; set; }
     }
 }
