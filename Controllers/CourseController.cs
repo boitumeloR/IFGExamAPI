@@ -26,6 +26,7 @@ namespace IFGExamAPI.Controllers
                 var courses = db.RegisteredCourses.Include(zz => zz.Learner)
                     .Include(zz => zz.Learner.UserLogin)
                     .Include(zz => zz.Course)
+                    .Include(zz => zz.RegistrationStatu)
                     .Include(zz => zz.Course.SchoolSubject)
                     .Include(zz => zz.Course.CourseGrade)
                     .Where(zz => zz.Learner.UserLogin.EmailAddress == newSession.EmailAddress)

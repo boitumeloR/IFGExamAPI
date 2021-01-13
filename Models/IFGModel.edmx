@@ -65,11 +65,18 @@
           <Property Name="LearnerID" Type="int" />
           <Property Name="CourseID" Type="int" />
           <Property Name="RegisterDate" Type="datetime" Nullable="false" />
-          <Property Name="IsRegistered" Type="bit" Nullable="false" />
+          <Property Name="RegistrationStatusID" Type="int" />
           <Property Name="DeregisterDate" Type="datetime" />
           <Property Name="DeregisterReason" Type="varchar" MaxLength="200" />
           <Property Name="LearnerMark" Type="float" />
           <Property Name="CourseComments" Type="varchar" MaxLength="200" />
+        </EntityType>
+        <EntityType Name="RegistrationStatus">
+          <Key>
+            <PropertyRef Name="RegistrationStatusID" />
+          </Key>
+          <Property Name="RegistrationStatusID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RegistrationStatusName" Type="varchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="SchoolSubject">
           <Key>
@@ -173,6 +180,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="fk_REG_STATUS">
+          <End Role="RegistrationStatus" Type="Self.RegistrationStatus" Multiplicity="0..1" />
+          <End Role="RegisteredCourse" Type="Self.RegisteredCourse" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RegistrationStatus">
+              <PropertyRef Name="RegistrationStatusID" />
+            </Principal>
+            <Dependent Role="RegisteredCourse">
+              <PropertyRef Name="RegistrationStatusID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="fk_schoolsubject">
           <End Role="SchoolSubject" Type="Self.SchoolSubject" Multiplicity="0..1" />
           <End Role="Course" Type="Self.Course" Multiplicity="*" />
@@ -217,6 +236,7 @@
           <EntitySet Name="LearnerGrade" EntityType="Self.LearnerGrade" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Lesson" EntityType="Self.Lesson" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RegisteredCourse" EntityType="Self.RegisteredCourse" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RegistrationStatus" EntityType="Self.RegistrationStatus" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SchoolSubject" EntityType="Self.SchoolSubject" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserLogin" EntityType="Self.UserLogin" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserRole" EntityType="Self.UserRole" Schema="dbo" store:Type="Tables" />
@@ -243,6 +263,10 @@
           <AssociationSet Name="fk_lessoncourse" Association="Self.fk_lessoncourse">
             <End Role="Course" EntitySet="Course" />
             <End Role="Lesson" EntitySet="Lesson" />
+          </AssociationSet>
+          <AssociationSet Name="fk_REG_STATUS" Association="Self.fk_REG_STATUS">
+            <End Role="RegistrationStatus" EntitySet="RegistrationStatus" />
+            <End Role="RegisteredCourse" EntitySet="RegisteredCourse" />
           </AssociationSet>
           <AssociationSet Name="fk_schoolsubject" Association="Self.fk_schoolsubject">
             <End Role="SchoolSubject" EntitySet="SchoolSubject" />
@@ -333,13 +357,22 @@
           <Property Name="LearnerID" Type="Int32" />
           <Property Name="CourseID" Type="Int32" />
           <Property Name="RegisterDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="IsRegistered" Type="Boolean" Nullable="false" />
+          <Property Name="RegistrationStatusID" Type="Int32" />
           <Property Name="DeregisterDate" Type="DateTime" Precision="3" />
           <Property Name="DeregisterReason" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Name="LearnerMark" Type="Double" />
           <Property Name="CourseComments" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Course" Relationship="Self.fk_coursereg" FromRole="RegisteredCourse" ToRole="Course" />
           <NavigationProperty Name="Learner" Relationship="Self.fk_learnercourse" FromRole="RegisteredCourse" ToRole="Learner" />
+          <NavigationProperty Name="RegistrationStatu" Relationship="Self.fk_REG_STATUS" FromRole="RegisteredCourse" ToRole="RegistrationStatus" />
+        </EntityType>
+        <EntityType Name="RegistrationStatu">
+          <Key>
+            <PropertyRef Name="RegistrationStatusID" />
+          </Key>
+          <Property Name="RegistrationStatusID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RegistrationStatusName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="RegisteredCourses" Relationship="Self.fk_REG_STATUS" FromRole="RegistrationStatus" ToRole="RegisteredCourse" />
         </EntityType>
         <EntityType Name="SchoolSubject">
           <Key>
@@ -472,6 +505,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="fk_REG_STATUS">
+          <End Role="RegistrationStatus" Type="Self.RegistrationStatu" Multiplicity="0..1" />
+          <End Role="RegisteredCourse" Type="Self.RegisteredCourse" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RegistrationStatus">
+              <PropertyRef Name="RegistrationStatusID" />
+            </Principal>
+            <Dependent Role="RegisteredCourse">
+              <PropertyRef Name="RegistrationStatusID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="fk_userrole">
           <End Role="UserRole" Type="Self.UserRole" Multiplicity="0..1" />
           <End Role="UserLogin" Type="Self.UserLogin" Multiplicity="*" />
@@ -492,6 +537,7 @@
           <EntitySet Name="LearnerGrades" EntityType="Self.LearnerGrade" />
           <EntitySet Name="Lessons" EntityType="Self.Lesson" />
           <EntitySet Name="RegisteredCourses" EntityType="Self.RegisteredCourse" />
+          <EntitySet Name="RegistrationStatus" EntityType="Self.RegistrationStatu" />
           <EntitySet Name="SchoolSubjects" EntityType="Self.SchoolSubject" />
           <EntitySet Name="UserLogins" EntityType="Self.UserLogin" />
           <EntitySet Name="UserRoles" EntityType="Self.UserRole" />
@@ -526,6 +572,10 @@
           <AssociationSet Name="fk_userid" Association="Self.fk_userid">
             <End Role="UserLogin" EntitySet="UserLogins" />
             <End Role="Learner" EntitySet="Learners" />
+          </AssociationSet>
+          <AssociationSet Name="fk_REG_STATUS" Association="Self.fk_REG_STATUS">
+            <End Role="RegistrationStatus" EntitySet="RegistrationStatus" />
+            <End Role="RegisteredCourse" EntitySet="RegisteredCourses" />
           </AssociationSet>
           <AssociationSet Name="fk_userrole" Association="Self.fk_userrole">
             <End Role="UserRole" EntitySet="UserRoles" />
@@ -603,11 +653,19 @@
                 <ScalarProperty Name="LearnerID" ColumnName="LearnerID" />
                 <ScalarProperty Name="CourseID" ColumnName="CourseID" />
                 <ScalarProperty Name="RegisterDate" ColumnName="RegisterDate" />
-                <ScalarProperty Name="IsRegistered" ColumnName="IsRegistered" />
+                <ScalarProperty Name="RegistrationStatusID" ColumnName="RegistrationStatusID" />
                 <ScalarProperty Name="DeregisterDate" ColumnName="DeregisterDate" />
                 <ScalarProperty Name="DeregisterReason" ColumnName="DeregisterReason" />
                 <ScalarProperty Name="LearnerMark" ColumnName="LearnerMark" />
                 <ScalarProperty Name="CourseComments" ColumnName="CourseComments" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RegistrationStatus">
+            <EntityTypeMapping TypeName="IFGExamDBModel.RegistrationStatu">
+              <MappingFragment StoreEntitySet="RegistrationStatus">
+                <ScalarProperty Name="RegistrationStatusID" ColumnName="RegistrationStatusID" />
+                <ScalarProperty Name="RegistrationStatusName" ColumnName="RegistrationStatusName" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

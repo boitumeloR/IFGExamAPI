@@ -212,6 +212,9 @@
     <Compile Include="Models\RegisteredCourse.cs">
       <DependentUpon>IFGModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\RegistrationStatu.cs">
+      <DependentUpon>IFGModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\SchoolSubject.cs">
       <DependentUpon>IFGModel.tt</DependentUpon>
     </Compile>

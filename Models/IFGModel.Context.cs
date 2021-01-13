@@ -32,6 +32,7 @@ namespace IFGExamAPI.Models
         public virtual DbSet<LearnerGrade> LearnerGrades { get; set; }
         public virtual DbSet<Lesson> Lessons { get; set; }
         public virtual DbSet<RegisteredCourse> RegisteredCourses { get; set; }
+        public virtual DbSet<RegistrationStatu> RegistrationStatus { get; set; }
         public virtual DbSet<SchoolSubject> SchoolSubjects { get; set; }
         public virtual DbSet<UserLogin> UserLogins { get; set; }
         public virtual DbSet<UserRole> UserRoles { get; set; }
