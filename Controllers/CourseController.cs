@@ -254,5 +254,92 @@ namespace IFGExamAPI.Controllers
                 return toReturn;
             }
         }
+
+        [Route("ApproveDeregistration")]
+        [HttpPost]
+
+        public dynamic ApproveDeregistration(CourseVM vm)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            var newSession = vm.Session.RefreshSession();
+
+            if (newSession.Error == null)
+            {
+                var year = DateTime.Now.Year;
+                var dereg = db.RegisteredCourses.Where(zz => zz.CourseID == vm.CourseID).FirstOrDefault();
+                if (dereg != null)
+                {
+                    if (vm.IsApproved == true)
+                    {
+                        dereg.RegistrationStatusID = 3;
+
+                        try
+                        {
+                            db.SaveChanges();
+
+                            dynamic toReturn = new ExpandoObject();
+                            toReturn.Session = newSession;
+                            toReturn.Success = true;
+                            toReturn.Error = null;
+
+                            return toReturn;
+                        }
+                        catch (Exception e)
+                        {
+                            dynamic error = new ExpandoObject();
+                            error.Session = newSession;
+                            error.Success = false;
+                            error.Error = e.Message;
+
+                            return error;
+                        }
+                    }
+                    else
+                    {
+                        dereg.RegistrationStatusID = 1;
+
+                        try
+                        {
+                            db.SaveChanges();
+
+                            dynamic toReturn = new ExpandoObject();
+                            toReturn.Session = newSession;
+                            toReturn.Success = true;
+                            toReturn.Error = null;
+
+                            return toReturn;
+                        }
+                        catch (Exception e)
+                        {
+                            dynamic error = new ExpandoObject();
+                            error.Session = newSession;
+                            error.Success = false;
+                            error.Error = e.Message;
+
+                            return error;
+                        }
+                    }
+                }
+                else
+                {
+                    dynamic toReturn = new ExpandoObject();
+
+                    toReturn.Session = newSession;
+                    toReturn.Success = false;
+                    toReturn.Error = "Unknown error occured.";
+
+                    return toReturn;
+                }
+            }
+            else
+            {
+                dynamic toReturn = new ExpandoObject();
+
+                toReturn.Session = newSession;
+                toReturn.Success = false;
+
+                return toReturn;
+            }
+        }
     }
 }

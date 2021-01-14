@@ -16,6 +16,7 @@ namespace IFGExamAPI.ViewModels
         public int RegistrationStatusID { get; set; }
         public string RegistrationStatusName { get; set; }
         public string DeregisterReason { get; set; }
+        public bool IsApproved { get; set; }
         public AuthVM Session { get; set; }
         
     }
