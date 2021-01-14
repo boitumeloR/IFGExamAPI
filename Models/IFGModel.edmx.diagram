@@ -4,19 +4,21 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="48980f2ad04f42beb3aba5a0b6626e67" Name="Diagram1">
-        <EntityTypeShape EntityType="IFGExamDBModel.Centre" Width="1.5" PointX="1.5" PointY="10.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="IFGExamDBModel.Course" Width="1.5" PointX="3" PointY="3.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="IFGExamDBModel.CourseGrade" Width="1.5" PointX="0.75" PointY="3.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="IFGExamDBModel.Learner" Width="1.5" PointX="6" PointY="10" IsExpanded="true" />
-        <EntityTypeShape EntityType="IFGExamDBModel.LearnerGrade" Width="1.5" PointX="3.75" PointY="8.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="IFGExamDBModel.Lesson" Width="1.5" PointX="5.25" PointY="3.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="IFGExamDBModel.RegisteredCourse" Width="1.5" PointX="8.25" PointY="2.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="IFGExamDBModel.RegistrationStatu" Width="1.5" PointX="6" PointY="15.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="IFGExamDBModel.SchoolSubject" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="IFGExamDBModel.UserLogin" Width="1.5" PointX="3.75" PointY="10.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="IFGExamDBModel.UserRole" Width="1.5" PointX="1.5" PointY="13.125" IsExpanded="true" />
+      <Diagram DiagramId="ddb711725cc54dc685ebef487a41226f" Name="Diagram1">
+        <EntityTypeShape EntityType="IFGExamDBModel.Centre" Width="1.5" PointX="1.5" PointY="12" IsExpanded="true" />
+        <EntityTypeShape EntityType="IFGExamDBModel.Course" Width="1.5" PointX="3" PointY="3.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="IFGExamDBModel.CourseCentre" Width="1.5" PointX="0.75" PointY="3.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="IFGExamDBModel.CourseGrade" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="IFGExamDBModel.Learner" Width="1.5" PointX="6" PointY="11.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="IFGExamDBModel.LearnerGrade" Width="1.5" PointX="3.75" PointY="9.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="IFGExamDBModel.Lesson" Width="1.5" PointX="5.25" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="IFGExamDBModel.RegisteredCourse" Width="1.5" PointX="8.25" PointY="3" IsExpanded="true" />
+        <EntityTypeShape EntityType="IFGExamDBModel.RegistrationStatu" Width="1.5" PointX="6" PointY="15.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="IFGExamDBModel.SchoolSubject" Width="1.5" PointX="0.75" PointY="7.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="IFGExamDBModel.UserLogin" Width="1.5" PointX="3.75" PointY="12.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="IFGExamDBModel.UserRole" Width="1.5" PointX="1.5" PointY="14.25" IsExpanded="true" />
         <AssociationConnector Association="IFGExamDBModel.fk_centre" ManuallyRouted="false" />
+        <AssociationConnector Association="IFGExamDBModel.fk_coursecentre" ManuallyRouted="false" />
         <AssociationConnector Association="IFGExamDBModel.fk_coursegrade" ManuallyRouted="false" />
         <AssociationConnector Association="IFGExamDBModel.fk_coursereg" ManuallyRouted="false" />
         <AssociationConnector Association="IFGExamDBModel.fk_lessoncourse" ManuallyRouted="false" />

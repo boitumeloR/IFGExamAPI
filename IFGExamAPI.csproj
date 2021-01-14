@@ -182,6 +182,9 @@
     <Compile Include="Models\Course.cs">
       <DependentUpon>IFGModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\CourseCentre.cs">
+      <DependentUpon>IFGModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\CourseGrade.cs">
       <DependentUpon>IFGModel.tt</DependentUpon>
     </Compile>
@@ -227,6 +230,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\AuthVM.cs" />
     <Compile Include="ViewModels\CourseVM.cs" />
+    <Compile Include="ViewModels\EnrollVM.cs" />
     <Compile Include="ViewModels\LearnerVM.cs" />
   </ItemGroup>
   <ItemGroup>
