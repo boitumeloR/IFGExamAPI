@@ -499,6 +499,65 @@ namespace IFGExamAPI.Controllers
             }
         }
 
+        [Route("DeleteCourse")]
+        [HttpPost]
+
+        public dynamic DeleteCourse(CourseVM vm)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            var newSession = vm.Session.RefreshSession();
+
+            if (newSession.Error == null)
+            {
+                var course = db.Courses.Where(zz => zz.CourseID == vm.CourseID).FirstOrDefault();
+
+                if (course != null)
+                {
+                    try
+                    {
+                        db.Courses.Remove(course);
+                        db.SaveChanges();
+                        dynamic toReturn = new ExpandoObject();
+
+                        toReturn.Session = newSession;
+                        toReturn.Success = true;
+
+                        return toReturn;
+
+                    }
+                    catch (Exception)
+                    {
+                        dynamic toReturn = new ExpandoObject();
+
+                        toReturn.Session = newSession;
+                        toReturn.Success = true;
+                        toReturn.Error = "An unkown error occured.";
+
+                        return toReturn;
+                    }
+                }
+                else
+                {
+                    dynamic toReturn = new ExpandoObject();
+
+                    toReturn.Session = newSession;
+                    toReturn.Success = true;
+                    toReturn.Error = "Course not found";
+
+                    return toReturn;
+                }
+            }
+            else
+            {
+                dynamic toReturn = new ExpandoObject();
+
+                toReturn.Session = newSession;
+                toReturn.Success = false;
+
+                return toReturn;
+            }
+        }
+
         [Route("CheckModificationStatus")]
         [HttpPost]
 
