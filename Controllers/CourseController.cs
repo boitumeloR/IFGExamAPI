@@ -432,6 +432,42 @@ namespace IFGExamAPI.Controllers
             }
         }
 
+        [Route("CheckModificationStatus")]
+        [HttpPost]
+
+        public dynamic CheckModificationStatus(CourseVM vm)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            var newSession = vm.Session.RefreshSession();
+
+            if (newSession.Error == null)
+            {
+                var courseExists = db.RegisteredCourses.Any(zz => zz.CourseID == vm.CourseID);
+                dynamic toReturn = new ExpandoObject();
+
+                toReturn.Session = newSession;
+                if (courseExists == false)
+                {
+                    toReturn.CanModify = true;
+                }
+                else
+                {
+                    toReturn.CanModify = false;
+                }
+
+                return toReturn;
+            }
+            else
+            {
+                dynamic toReturn = new ExpandoObject();
+
+                toReturn.Session = newSession;
+                toReturn.CanModify = false;
+
+                return toReturn;
+            }
+        }
+
         [Route("GetCourseGrades")]
         [HttpGet]
         public dynamic GetCourseGrades()
