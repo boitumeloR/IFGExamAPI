@@ -378,5 +378,94 @@ namespace IFGExamAPI.Controllers
                 return toReturn;
             }
         }
+
+        [Route("AddCourse")]
+        [HttpPost]
+
+        public dynamic AddCourse(CourseVM vm)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            var newSession = vm.Session.RefreshSession();
+
+            if (newSession.Error == null)
+            {
+                var course = new Course
+                {
+                    CourseName = vm.CourseName,
+                    CourseDescription = vm.CourseDescription,
+                    SubjectID = vm.CourseSubjectID,
+                    CourseGradeID = vm.CourseGradeID,
+                    CourseCentreID = vm.CourseCentreID
+                };
+
+                try
+                {
+                    db.Courses.Add(course);
+                    db.SaveChanges();
+                    dynamic toReturn = new ExpandoObject();
+
+                    toReturn.Session = newSession;
+                    toReturn.Success = true;
+
+                    return toReturn;
+
+                }
+                catch (Exception)
+                {
+                    dynamic toReturn = new ExpandoObject();
+
+                    toReturn.Session = newSession;
+                    toReturn.Success = true;
+                    toReturn.Error = "An unkown error occured.";
+
+                    return toReturn;
+                }
+            }
+            else
+            {
+                dynamic toReturn = new ExpandoObject();
+
+                toReturn.Session = newSession;
+                toReturn.Success = false;
+
+                return toReturn;
+            }
+        }
+
+        [Route("GetCourseGrades")]
+        [HttpGet]
+        public dynamic GetCourseGrades()
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            return db.CourseGrades.Select(zz => new
+            {
+                CourseGradeID = zz.CourseGradeID,
+                CourseGradeLevel = zz.CourseGradeLevel
+            }).ToList();
+        }
+
+        [Route("GetCourseCentres")]
+        [HttpGet]
+        public dynamic GetCourseCentres()
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            return db.CourseCentres.Select(zz => new
+            {
+                CourseCentreID = zz.CourseCentreID,
+                CourseCentreName = zz.CourseCentreName
+            }).ToList();
+        }
+
+        [Route("GetCourseSubjects")]
+        [HttpGet]
+        public dynamic GetCourseSubjects()
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            return db.SchoolSubjects.Select(zz => new
+            {
+                CourseSubjectID = zz.SubjectID,
+                CourseSubjectName = zz.SubjectName
+            }).ToList();
+        }
     }
 }
