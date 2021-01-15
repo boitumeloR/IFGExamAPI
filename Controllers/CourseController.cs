@@ -342,5 +342,41 @@ namespace IFGExamAPI.Controllers
                 return toReturn;
             }
         }
+
+        [Route("AdminCourses")]
+        [HttpPost]
+
+        public dynamic AdminCourses(AuthVM vm)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            var newSession = vm.RefreshSession();
+
+            if (newSession.Error == null)
+            {
+                var courses = db.Courses.Include(zz => zz.SchoolSubject).Select(zz => new CourseVM
+                {
+                    CourseID = zz.CourseID,
+                    CourseName = zz.CourseName,
+                    CourseSubject = zz.SchoolSubject.SubjectName,
+                    CourseDescription = zz.CourseDescription
+                }).ToList();
+
+                dynamic toReturn = new ExpandoObject();
+
+                toReturn.Session = newSession;
+                toReturn.Courses = courses;
+
+                return toReturn;
+            }
+            else
+            {
+                dynamic toReturn = new ExpandoObject();
+
+                toReturn.Session = newSession;
+                toReturn.Courses = null;
+
+                return toReturn;
+            }
+        }
     }
 }

@@ -9,6 +9,7 @@ namespace IFGExamAPI.ViewModels
     {
         public int CourseID { get; set; }
         public string CourseName { get; set; }
+        public string CourseDescription { get; set; }
         public DateTime DateRegistered { get; set; }
         public int CourseGradeID { get; set; }
         public int CourseGradeLevel { get; set; }
