@@ -38,6 +38,7 @@ namespace IFGExamAPI.Controllers
                         CourseGradeID = (int)zz.Course.CourseGradeID,
                         CourseGradeLevel = (int) zz.Course.CourseGrade.CourseGradeLevel,
                         CourseSubject = zz.Course.SchoolSubject.SubjectName,
+                        CourseMark  = zz.LearnerMark,
                         DateRegistered = zz.RegisterDate,
                         RegistrationStatusID = (int)zz.RegistrationStatusID,
                         RegistrationStatusName = zz.RegistrationStatu.RegistrationStatusName
