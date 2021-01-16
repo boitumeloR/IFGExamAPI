@@ -15,6 +15,7 @@ namespace IFGExamAPI.ViewModels
         public int LearnerID { get; set; }
         public int? CourseID { get; set; }
         public int? CentreID { get; set; }
+        public bool IsDeregistered { get; set; }
         public string LearnerGradeID { get; set; }
         public string LearnerAddress { get; set; }
         public string UserEmail { get; set; }

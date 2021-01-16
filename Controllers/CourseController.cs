@@ -530,7 +530,7 @@ namespace IFGExamAPI.Controllers
                         dynamic toReturn = new ExpandoObject();
 
                         toReturn.Session = newSession;
-                        toReturn.Success = true;
+                        toReturn.Success = false;
                         toReturn.Error = "An unkown error occured.";
 
                         return toReturn;
@@ -541,7 +541,7 @@ namespace IFGExamAPI.Controllers
                     dynamic toReturn = new ExpandoObject();
 
                     toReturn.Session = newSession;
-                    toReturn.Success = true;
+                    toReturn.Success = false;
                     toReturn.Error = "Course not found";
 
                     return toReturn;
