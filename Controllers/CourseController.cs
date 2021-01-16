@@ -80,6 +80,7 @@ namespace IFGExamAPI.Controllers
                         .Include(zz => zz.SchoolSubject)
                         .Where(zz => zz.CourseCentreID == newSession.CentreID)
                         .Where(zz => zz.CourseGradeID == learner.LearnerGradeID)
+                        .Where(zz => zz.RegisteredCourses.Any(xx => xx.LearnerID == learner.LearnerID && xx.CourseID == zz.CourseID && xx.RegistrationStatusID == 1) == false)
                         .Where(zz => zz.RegisteredCourses.Where(xx => xx.CourseID == zz.CourseID).Count() < 35)
                         .Select(zz => new
                         {
@@ -104,6 +105,7 @@ namespace IFGExamAPI.Controllers
                         .Include(zz => zz.SchoolSubject)
                         .Where(zz => zz.CourseCentreID == newSession.CentreID)
                         .Where(zz => zz.CourseGradeID == learner.LearnerGradeID)
+                        .Where(zz => zz.RegisteredCourses.Any(xx => xx.LearnerID == learner.LearnerID && xx.CourseID == zz.CourseID && xx.RegistrationStatusID == 1) == false)
                         .Where(zz => zz.RegisteredCourses.Where(xx => xx.CourseID == zz.CourseID).Count() < 35)
                         .Where(zz => zz.SubjectID == 1 || zz.SubjectID == 2)
                         .Select(zz => new

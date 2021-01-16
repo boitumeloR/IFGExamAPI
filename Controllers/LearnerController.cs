@@ -273,6 +273,90 @@ namespace IFGExamAPI.Controllers
             }
         }
 
+        [Route("GetCourseLearners")]
+        [HttpPost]
+
+        public dynamic GetCourseLearners(LearnerVM vm)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            var newSession = vm.Session.RefreshSession();
+            if (newSession.Error == null)
+            {
+                var learners = db.RegisteredCourses.Include(zz => zz.Learner)
+                    .Include(zz => zz.Learner.UserLogin)
+                    .Include(zz => zz.Course)
+                    .Where(zz => zz.CourseID == (int)vm.CourseID && zz.RegistrationStatusID == 1)
+                    .Select(zz => new
+                    {
+                        LearnerID = (int)zz.LearnerID,
+                        LearnerName = zz.Learner.UserLogin.Name,
+                        LearnerSurname = zz.Learner.UserLogin.Surname,
+                        IDNumber = zz.Learner.UserLogin.IDNumber,
+                    }).ToList();
+
+                dynamic toReturn = new ExpandoObject();
+                toReturn.Session = newSession;
+                toReturn.Learners = learners;
+                return toReturn;
+            }
+            else
+            {
+                dynamic toReturn = new ExpandoObject();
+
+                toReturn.Session = newSession;
+                toReturn.Learners = null;
+
+                return toReturn;
+            }
+        }
+
+        [Route("AssignMark")]
+        [HttpPost]
+
+        public dynamic AssignMark(LearnerVM vm)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            var newSession = vm.Session.RefreshSession();
+
+            if (newSession.Error == null)
+            {
+                var learner = db.Learners.Include(zz => zz.UserLogin).Where(zz => zz.UserLogin.EmailAddress == newSession.EmailAddress).FirstOrDefault();
+                var enrollment = db.RegisteredCourses.Where(zz => zz.LearnerID == vm.LearnerID && zz.CourseID == vm.CourseID).FirstOrDefault();
+
+                try
+                {
+                    enrollment.LearnerMark = vm.LearnerMark;
+                    db.SaveChanges();
+                    dynamic toReturn = new ExpandoObject();
+
+                    toReturn.Session = newSession;
+                    toReturn.Success = true;
+
+                    return toReturn;
+
+                }
+                catch (Exception)
+                {
+                    dynamic toReturn = new ExpandoObject();
+
+                    toReturn.Session = newSession;
+                    toReturn.Success = true;
+                    toReturn.Error = "An unkown error occured.";
+
+                    return toReturn;
+                }
+            }
+            else
+            {
+                dynamic toReturn = new ExpandoObject();
+
+                toReturn.Session = newSession;
+                toReturn.Success = false;
+
+                return toReturn;
+            }
+        }
+
         [Route("GetLearnerCentres")]
         [HttpGet]
         public dynamic GetLearnerCentres()
