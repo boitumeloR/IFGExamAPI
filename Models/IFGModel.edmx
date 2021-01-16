@@ -63,7 +63,6 @@
           </Key>
           <Property Name="LessonID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="LessonFreqency" Type="int" Nullable="false" />
-          <Property Name="LessonTime" Type="datetime" Nullable="false" />
           <Property Name="CourseID" Type="int" />
         </EntityType>
         <EntityType Name="RegisteredCourse">
@@ -382,7 +381,6 @@
           </Key>
           <Property Name="LessonID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="LessonFreqency" Type="Int32" Nullable="false" />
-          <Property Name="LessonTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="CourseID" Type="Int32" />
           <NavigationProperty Name="Course" Relationship="Self.fk_lessoncourse" FromRole="Lesson" ToRole="Course" />
         </EntityType>
@@ -705,7 +703,6 @@
               <MappingFragment StoreEntitySet="Lesson">
                 <ScalarProperty Name="LessonID" ColumnName="LessonID" />
                 <ScalarProperty Name="LessonFreqency" ColumnName="LessonFreqency" />
-                <ScalarProperty Name="LessonTime" ColumnName="LessonTime" />
                 <ScalarProperty Name="CourseID" ColumnName="CourseID" />
               </MappingFragment>
             </EntityTypeMapping>

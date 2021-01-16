@@ -33,12 +33,14 @@ namespace IFGExamAPI.Controllers
                     .Where(zz => zz.Learner.UserLogin.EmailAddress == newSession.EmailAddress && zz.RegisterDate.Year == year)
                     .Select(zz => new CourseVM
                     {
-                        CourseID =  (int)zz.CourseID,
+                        CourseID = (int)zz.CourseID,
                         CourseName = zz.Course.CourseName,
                         CourseGradeID = (int)zz.Course.CourseGradeID,
-                        CourseGradeLevel = (int) zz.Course.CourseGrade.CourseGradeLevel,
+                        CourseGradeLevel = (int)zz.Course.CourseGrade.CourseGradeLevel,
                         CourseSubject = zz.Course.SchoolSubject.SubjectName,
-                        CourseMark  = zz.LearnerMark,
+                        CourseMark = zz.LearnerMark,
+                        CourseComments = zz.CourseComments,
+                        LessonFrequency = db.Lessons.Where(xx => xx.CourseID == zz.CourseID).Select(xx => xx.LessonFreqency).FirstOrDefault(),
                         DateRegistered = zz.RegisterDate,
                         RegistrationStatusID = (int)zz.RegistrationStatusID,
                         RegistrationStatusName = zz.RegistrationStatu.RegistrationStatusName
@@ -80,6 +82,7 @@ namespace IFGExamAPI.Controllers
                         .Include(zz => zz.SchoolSubject)
                         .Where(zz => zz.CourseCentreID == newSession.CentreID)
                         .Where(zz => zz.CourseGradeID == learner.LearnerGradeID)
+                        .Where(zz => zz.RegisteredCourses.Any(xx => xx.LearnerID == learner.LearnerID && xx.CourseID == zz.CourseID && xx.RegistrationStatusID == 1) == false)
                         .Where(zz => zz.RegisteredCourses.Where(xx => xx.CourseID == zz.CourseID).Count() < 35)
                         .Select(zz => new
                         {
@@ -104,6 +107,7 @@ namespace IFGExamAPI.Controllers
                         .Include(zz => zz.SchoolSubject)
                         .Where(zz => zz.CourseCentreID == newSession.CentreID)
                         .Where(zz => zz.CourseGradeID == learner.LearnerGradeID)
+                        .Where(zz => zz.RegisteredCourses.Any(xx => xx.LearnerID == learner.LearnerID && xx.CourseID == zz.CourseID && xx.RegistrationStatusID == 1) == false)
                         .Where(zz => zz.RegisteredCourses.Where(xx => xx.CourseID == zz.CourseID).Count() < 35)
                         .Where(zz => zz.SubjectID == 1 || zz.SubjectID == 2)
                         .Select(zz => new
@@ -361,7 +365,8 @@ namespace IFGExamAPI.Controllers
                     CourseCentreID = (int)zz.CourseCentreID,
                     CourseGradeID = (int)zz.CourseGradeID,
                     CourseSubject = zz.SchoolSubject.SubjectName,
-                    CourseDescription = zz.CourseDescription
+                    CourseDescription = zz.CourseDescription,
+                    LessonFrequency = zz.Lessons.Where(xx => xx.CourseID == zz.CourseID).Select(xx => xx.LessonFreqency).FirstOrDefault()
                 }).ToList();
 
                 dynamic toReturn = new ExpandoObject();
@@ -405,6 +410,16 @@ namespace IFGExamAPI.Controllers
                 {
                     db.Courses.Add(course);
                     db.SaveChanges();
+
+                    var latestCourse = db.Courses.OrderByDescending(zz => zz.CourseID).FirstOrDefault();
+                    var lesson = new Lesson
+                    {
+                        LessonFreqency = vm.LessonFrequency,
+                        CourseID = latestCourse.CourseID
+                    };
+
+                    db.Lessons.Add(lesson);
+                    db.SaveChanges();
                     dynamic toReturn = new ExpandoObject();
 
                     toReturn.Session = newSession;
@@ -446,14 +461,16 @@ namespace IFGExamAPI.Controllers
             if (newSession.Error == null)
             {
                 var course = db.Courses.Where(zz => zz.CourseID == vm.CourseID).FirstOrDefault();
-
                 if (course != null)
                 {
+                    var lesson = db.Lessons.Where(zz => zz.CourseID == course.CourseID).FirstOrDefault();
                     course.CourseName = vm.CourseName;
                     course.CourseDescription = vm.CourseDescription;
                     course.SubjectID = vm.CourseSubjectID;
                     course.CourseGradeID = vm.CourseGradeID;
                     course.CourseCentreID = vm.CourseCentreID;
+                    lesson.LessonFreqency = vm.LessonFrequency;
+                    
 
                     try
                     {
@@ -515,6 +532,10 @@ namespace IFGExamAPI.Controllers
                 {
                     try
                     {
+                        var lesson = db.Lessons.Where(zz => zz.CourseID == course.CourseID).FirstOrDefault();
+
+                        db.Lessons.Remove(lesson);
+                        db.SaveChanges();
                         db.Courses.Remove(course);
                         db.SaveChanges();
                         dynamic toReturn = new ExpandoObject();
@@ -530,7 +551,7 @@ namespace IFGExamAPI.Controllers
                         dynamic toReturn = new ExpandoObject();
 
                         toReturn.Session = newSession;
-                        toReturn.Success = true;
+                        toReturn.Success = false;
                         toReturn.Error = "An unkown error occured.";
 
                         return toReturn;
@@ -541,7 +562,7 @@ namespace IFGExamAPI.Controllers
                     dynamic toReturn = new ExpandoObject();
 
                     toReturn.Session = newSession;
-                    toReturn.Success = true;
+                    toReturn.Success = false;
                     toReturn.Error = "Course not found";
 
                     return toReturn;
@@ -592,6 +613,67 @@ namespace IFGExamAPI.Controllers
 
                 return toReturn;
             }
+        }
+
+        [Route("GetLearnerSubjects")]
+        [HttpPost]
+        public dynamic GetCourseSubjects(AuthVM vm)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            var newSession = vm.RefreshSession();
+            if (newSession.Error == null)
+            {
+                var learner = db.Learners.Include(zz => zz.UserLogin).Include(zz => zz.LearnerGrade).Where(zz => zz.UserLogin.EmailAddress == newSession.EmailAddress).FirstOrDefault();
+
+                if (learner.LearnerGrade.LearnerGradeLevel > 7)
+                {
+                    var subjects = db.SchoolSubjects.Select(zz => new
+                    {
+                        SubjectID = zz.SubjectID,
+                        SubjectName = zz.SubjectName
+                    }).ToList();
+                    dynamic toReturn = new ExpandoObject();
+                    toReturn.Session = newSession;
+                    toReturn.Subjects = subjects;
+                    return toReturn;
+                }
+                else
+                {
+                    var subjects = db.SchoolSubjects.Where(zz => zz.SubjectID <=2)
+                        .Select(zz => new
+                        {
+                            SubjectID = zz.SubjectID,
+                            SubjectName = zz.SubjectName
+                        }).ToList();
+                    dynamic toReturn = new ExpandoObject();
+                    toReturn.Session = newSession;
+                    toReturn.Subjects = subjects;
+                    return toReturn;
+                }
+            }
+            else
+            {
+                dynamic toReturn = new ExpandoObject();
+
+                toReturn.Session = newSession;
+                toReturn.Courses = null;
+
+                return toReturn;
+            }
+        }
+
+        [Route("GetSubjectCourses")]
+        [HttpGet]
+        public dynamic GetSubjectCourses(int subjectID)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            var courses = db.Courses.Where(zz => zz.SubjectID == subjectID).Select(zz => new
+            {
+                CourseID = zz.CourseID,
+                CourseName = zz.CourseName,
+                CourseDescription = zz.CourseDescription
+            }).ToList();
+            return courses;
         }
 
         [Route("GetCourseGrades")]
