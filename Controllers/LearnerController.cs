@@ -159,6 +159,7 @@ namespace IFGExamAPI.Controllers
                     .Include(zz => zz.Learner.UserLogin)
                     .Include(zz => zz.Course)
                     .Include(zz => zz.RegistrationStatu)
+                    .Where(zz => zz.RegistrationStatusID == 2)
                     .Select(zz => new
                     {
                         LearnerID = (int)zz.LearnerID,
@@ -320,12 +321,13 @@ namespace IFGExamAPI.Controllers
 
             if (newSession.Error == null)
             {
-                var learner = db.Learners.Include(zz => zz.UserLogin).Where(zz => zz.UserLogin.EmailAddress == newSession.EmailAddress).FirstOrDefault();
+                var learner = db.Learners.Include(zz => zz.UserLogin).Where(zz => zz.LearnerID== vm.LearnerID).FirstOrDefault();
                 var enrollment = db.RegisteredCourses.Where(zz => zz.LearnerID == vm.LearnerID && zz.CourseID == vm.CourseID).FirstOrDefault();
 
                 try
                 {
                     enrollment.LearnerMark = vm.LearnerMark;
+                    enrollment.CourseComments = vm.CourseComments;
                     db.SaveChanges();
                     dynamic toReturn = new ExpandoObject();
 

@@ -16,6 +16,8 @@ namespace IFGExamAPI.ViewModels
         public int CourseGradeLevel { get; set; }
         public double? CourseMark { get; set; }
         public string CourseSubject { get; set; }
+        public string CourseComments { get; set; }
+        public int LessonFrequency { get; set; }
         public int CourseSubjectID { get; set; }
         public int RegistrationStatusID { get; set; }
         public string RegistrationStatusName { get; set; }

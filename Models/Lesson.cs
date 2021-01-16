@@ -16,7 +16,6 @@ namespace IFGExamAPI.Models
     {
         public int LessonID { get; set; }
         public int LessonFreqency { get; set; }
-        public System.DateTime LessonTime { get; set; }
         public Nullable<int> CourseID { get; set; }
     
         public virtual Course Course { get; set; }
