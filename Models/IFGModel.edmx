@@ -18,8 +18,17 @@
           </Key>
           <Property Name="CourseID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="CourseName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="CourseDescription" Type="varchar" MaxLength="150" Nullable="false" />
           <Property Name="SubjectID" Type="int" />
           <Property Name="CourseGradeID" Type="int" />
+          <Property Name="CourseCentreID" Type="int" />
+        </EntityType>
+        <EntityType Name="CourseCentre">
+          <Key>
+            <PropertyRef Name="CourseCentreID" />
+          </Key>
+          <Property Name="CourseCentreID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CourseCentreName" Type="varchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="CourseGrade">
           <Key>
@@ -117,6 +126,18 @@
             </Principal>
             <Dependent Role="UserLogin">
               <PropertyRef Name="CentreID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_coursecentre">
+          <End Role="CourseCentre" Type="Self.CourseCentre" Multiplicity="0..1" />
+          <End Role="Course" Type="Self.Course" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CourseCentre">
+              <PropertyRef Name="CourseCentreID" />
+            </Principal>
+            <Dependent Role="Course">
+              <PropertyRef Name="CourseCentreID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -231,6 +252,7 @@
         <EntityContainer Name="IFGExamDBModelStoreContainer">
           <EntitySet Name="Centre" EntityType="Self.Centre" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Course" EntityType="Self.Course" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CourseCentre" EntityType="Self.CourseCentre" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CourseGrade" EntityType="Self.CourseGrade" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Learner" EntityType="Self.Learner" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LearnerGrade" EntityType="Self.LearnerGrade" Schema="dbo" store:Type="Tables" />
@@ -243,6 +265,10 @@
           <AssociationSet Name="fk_centre" Association="Self.fk_centre">
             <End Role="Centre" EntitySet="Centre" />
             <End Role="UserLogin" EntitySet="UserLogin" />
+          </AssociationSet>
+          <AssociationSet Name="fk_coursecentre" Association="Self.fk_coursecentre">
+            <End Role="CourseCentre" EntitySet="CourseCentre" />
+            <End Role="Course" EntitySet="Course" />
           </AssociationSet>
           <AssociationSet Name="fk_coursegrade" Association="Self.fk_coursegrade">
             <End Role="CourseGrade" EntitySet="CourseGrade" />
@@ -300,12 +326,23 @@
           </Key>
           <Property Name="CourseID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="CourseName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="CourseDescription" Type="String" MaxLength="150" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="SubjectID" Type="Int32" />
           <Property Name="CourseGradeID" Type="Int32" />
+          <Property Name="CourseCentreID" Type="Int32" />
+          <NavigationProperty Name="CourseCentre" Relationship="Self.fk_coursecentre" FromRole="Course" ToRole="CourseCentre" />
           <NavigationProperty Name="CourseGrade" Relationship="Self.fk_coursegrade" FromRole="Course" ToRole="CourseGrade" />
           <NavigationProperty Name="RegisteredCourses" Relationship="Self.fk_coursereg" FromRole="Course" ToRole="RegisteredCourse" />
           <NavigationProperty Name="Lessons" Relationship="Self.fk_lessoncourse" FromRole="Course" ToRole="Lesson" />
           <NavigationProperty Name="SchoolSubject" Relationship="Self.fk_schoolsubject" FromRole="Course" ToRole="SchoolSubject" />
+        </EntityType>
+        <EntityType Name="CourseCentre">
+          <Key>
+            <PropertyRef Name="CourseCentreID" />
+          </Key>
+          <Property Name="CourseCentreID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CourseCentreName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Courses" Relationship="Self.fk_coursecentre" FromRole="CourseCentre" ToRole="Course" />
         </EntityType>
         <EntityType Name="CourseGrade">
           <Key>
@@ -421,6 +458,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="fk_coursecentre">
+          <End Role="CourseCentre" Type="Self.CourseCentre" Multiplicity="0..1" />
+          <End Role="Course" Type="Self.Course" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CourseCentre">
+              <PropertyRef Name="CourseCentreID" />
+            </Principal>
+            <Dependent Role="Course">
+              <PropertyRef Name="CourseCentreID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="fk_coursegrade">
           <End Role="CourseGrade" Type="Self.CourseGrade" Multiplicity="0..1" />
           <End Role="Course" Type="Self.Course" Multiplicity="*" />
@@ -532,6 +581,7 @@
         <EntityContainer Name="IFGExamDBEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Centres" EntityType="Self.Centre" />
           <EntitySet Name="Courses" EntityType="Self.Course" />
+          <EntitySet Name="CourseCentres" EntityType="Self.CourseCentre" />
           <EntitySet Name="CourseGrades" EntityType="Self.CourseGrade" />
           <EntitySet Name="Learners" EntityType="Self.Learner" />
           <EntitySet Name="LearnerGrades" EntityType="Self.LearnerGrade" />
@@ -544,6 +594,10 @@
           <AssociationSet Name="fk_centre" Association="Self.fk_centre">
             <End Role="Centre" EntitySet="Centres" />
             <End Role="UserLogin" EntitySet="UserLogins" />
+          </AssociationSet>
+          <AssociationSet Name="fk_coursecentre" Association="Self.fk_coursecentre">
+            <End Role="CourseCentre" EntitySet="CourseCentres" />
+            <End Role="Course" EntitySet="Courses" />
           </AssociationSet>
           <AssociationSet Name="fk_coursegrade" Association="Self.fk_coursegrade">
             <End Role="CourseGrade" EntitySet="CourseGrades" />
@@ -601,8 +655,18 @@
               <MappingFragment StoreEntitySet="Course">
                 <ScalarProperty Name="CourseID" ColumnName="CourseID" />
                 <ScalarProperty Name="CourseName" ColumnName="CourseName" />
+                <ScalarProperty Name="CourseDescription" ColumnName="CourseDescription" />
                 <ScalarProperty Name="SubjectID" ColumnName="SubjectID" />
                 <ScalarProperty Name="CourseGradeID" ColumnName="CourseGradeID" />
+                <ScalarProperty Name="CourseCentreID" ColumnName="CourseCentreID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CourseCentres">
+            <EntityTypeMapping TypeName="IFGExamDBModel.CourseCentre">
+              <MappingFragment StoreEntitySet="CourseCentre">
+                <ScalarProperty Name="CourseCentreID" ColumnName="CourseCentreID" />
+                <ScalarProperty Name="CourseCentreName" ColumnName="CourseCentreName" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
