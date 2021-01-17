@@ -46,7 +46,6 @@ namespace IFGExamAPI.Controllers
                         RegistrationStatusName = zz.RegistrationStatu.RegistrationStatusName
                     })
                     .ToList();
-
                 dynamic toReturn = new ExpandoObject();
                 toReturn.Session = newSession;
                 toReturn.Courses = courses;
@@ -93,11 +92,12 @@ namespace IFGExamAPI.Controllers
                             CourseStatus = false
                         }).ToList();
 
+                    var regCourses = db.RegisteredCourses.Where(zz => zz.LearnerID == learner.LearnerID && zz.RegistrationStatusID != 3).Count();
                     dynamic toReturn = new ExpandoObject();
 
                     toReturn.Session = newSession;
                     toReturn.Courses = courses;
-                    toReturn.MaxCourses = 3;
+                    toReturn.MaxCourses = 3 - regCourses;
 
                     return toReturn;
                 }
@@ -119,11 +119,12 @@ namespace IFGExamAPI.Controllers
                             CourseStatus = false
                         }).ToList();
 
+                    var regCourses = db.RegisteredCourses.Where(zz => zz.LearnerID == learner.LearnerID && zz.RegistrationStatusID != 3).Count();
                     dynamic toReturn = new ExpandoObject();
 
                     toReturn.Session = newSession;
                     toReturn.Courses = courses;
-                    toReturn.MaxCourses = 2;
+                    toReturn.MaxCourses = 3 - regCourses;
 
                     return toReturn;
                 }
